@@ -38,7 +38,7 @@ Incident pq_dequeue(PriorityQueue* pq);
 //Peek at the highest-priority incident without removing it
 Incident pq_peek(PriorityQueue* pq);
 
-// Returns 1 if empty, 0 otherwise 
+// Returns 1 if empty, 0 otherwise
 int pq_is_empty(PriorityQueue* pq);
 
 // Print all incidents in the queue (for debugging/output)

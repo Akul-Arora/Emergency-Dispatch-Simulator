@@ -1,5 +1,7 @@
 #include <iostream>
 #include "graph_grid.h"
+#include "dispatch.h"
+#include "priority_queue.h"
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
     Graph g;
@@ -27,6 +29,37 @@ int main() {
     addEdge(&g, 6, 7, 32);
 
     printGraph(&g);
+
+        initializeUnits();
+
+        int choice;
+
+        while (1) {
+
+            printf("\n--- Emergency Dispatch System ---\n");
+            printf("1. Add Incident\n");
+            printf("2. Dispatch Last Incident\n");
+            printf("3. Exit\n");
+
+            scanf("%d", &choice);
+
+            if (choice == 1) {
+
+                addIncident();
+
+            } else if (choice == 2) {
+
+                if (incidentCount == 0) {
+                    printf("No incidents available.\n");
+                } else {
+
+                    dispatchUnit(incidents[incidentCount - 1]);
+                }
+
+            } else if (choice == 3) {
+
+                break;
+            }
 
     return 0;    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }

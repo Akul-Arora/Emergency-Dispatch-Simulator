@@ -1,18 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "priority_queue.h"
+#include "dispatch.h"
 
-#define MAX_INCIDENTS 100
-#define MAX_UNITS 10
-
-// Dispatch unit structure
-typedef struct {
-    int id;
-    int type;              // 1=ambulance 2=fire 3=police
-    int location;
-    int available;         // 1 = available, 0 = busy
-} DispatchUnit;
 
 Incident incidents[MAX_INCIDENTS];
 int incidentCount = 0;
@@ -21,7 +11,6 @@ DispatchUnit units[MAX_UNITS];
 int unitCount = 0;
 
 void initializeUnits() {
-
     unitCount = 3;
 
     units[0].id = 1;
@@ -40,6 +29,24 @@ void initializeUnits() {
     units[2].available = 1;
 }
 
+Incident createIncident() {
+    Incident incident;
+    printf("Hello it is 911 dispatch\nWhat is the ID.\n");
+    scanf("%d", (int*)&incident.id);
+
+    printf("What type of dispatch do you need.\n Type 1 for ambulance, 2 for fire, and 3 for police");
+    scanf("%d", (int*)&incident.requiredType);
+
+    printf("What is the ID.\n");
+    scanf("%d", (int*)&incident.id);
+
+    printf("What is the ID.\n");
+    scanf("%d", (int*)&incident.id);
+
+    printf("What is the ID.\n");
+    scanf("%d", (int*)&incident.id);
+    return incident;
+}
 void addIncident() {
 
     if (incidentCount >= MAX_INCIDENTS) {
@@ -70,41 +77,4 @@ void dispatchUnit(Incident inc) {
     }
 
     printf("No available units for this incident.\n");
-}
-
-int main() {
-
-    initializeUnits();
-
-    int choice;
-
-    while (1) {
-
-        printf("\n--- Emergency Dispatch System ---\n");
-        printf("1. Add Incident\n");
-        printf("2. Dispatch Last Incident\n");
-        printf("3. Exit\n");
-
-        scanf("%d", &choice);
-
-        if (choice == 1) {
-
-            addIncident();
-
-        } else if (choice == 2) {
-
-            if (incidentCount == 0) {
-                printf("No incidents available.\n");
-            } else {
-
-                dispatchUnit(incidents[incidentCount - 1]);
-            }
-
-        } else if (choice == 3) {
-
-            break;
-        }
-    }
-
-    return 0;
 }

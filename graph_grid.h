@@ -17,6 +17,7 @@ typedef struct {
     //all the adjacent nodes (adjacency list)
     Edge* adjacentNodes[MAX_NODES];
     uint8_t numNodes;
+    uint8_t occupied[MAX_NODES];
 } Graph ;
 
 enum intersectionNames {
@@ -40,4 +41,6 @@ enum intersectionNames {
 void createGraph(Graph* graph, int8_t nodes);
 void addEdge(Graph* graph, int8_t from, uint8_t to, uint8_t weight);
 void printGraph(Graph* g);
+static void dijkstra(int src, int dist[], int parent[]);
+static void print_path(int src, int dst, int parent[]);
 #endif //UNTITLED3_GRAPH_GRID_H

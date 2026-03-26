@@ -1,0 +1,60 @@
+static void dijkstra(int src, int dist[], int parent[]) {
+    for (int i = 0; i < N; i++) {
+        dist[i] = INF;//shortest distance currently known from source to node i
+        //dist[3] = 0 from source to 3 costs 0
+
+        parent[i] = -1;//which previous node gave the best path to i
+        //if shortest path to 11 comes from 14  parent[11] = 14
+    }
+    dist[src] = 0;
+
+    MinHeap h;
+    h.sz = 0;
+    heap_push(&h, src, 0);
+
+    while (!heap_empty(&h)) {
+        HeapItem cur = heap_pop(&h);
+        int u = cur.node;
+        int d = cur.dist;
+
+        if (d != dist[u]) continue; /* stale heap item */
+
+        for (Edge *e = g[u]; e; e = e->next) {
+            int v = e->to;
+            int nd = d + e->w;
+            if (nd < dist[v]) {
+                dist[v] = nd;
+                parent[v] = u;
+                heap_push(&h, v, nd);
+            }
+        }
+    }
+}
+
+static void print_path(int src, int dst, int parent[]) {
+    if (src == dst) {
+        printf("%d", src);
+        return;
+    }
+    if (parent[dst] == -1) {
+        printf("(no path)");
+        return;
+    }
+
+    int stack[MAXN], top = 0;
+    int cur = dst;
+    while (cur != -1) {
+        stack[top++] = cur;
+        if (cur == src) break;
+        cur = parent[cur];
+    }
+    if (stack[top - 1] != src) {
+        printf("(no path)");
+        return;
+    }
+
+    for (int i = top - 1; i >= 0; i--) {
+        printf("%d", stack[i]);
+        if (i) printf(" -> ");
+    }
+}

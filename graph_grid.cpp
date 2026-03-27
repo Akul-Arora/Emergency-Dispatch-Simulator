@@ -5,15 +5,18 @@
 #include "graph_grid.h"
 #include <stdio.h>
 #include <stdlib.h>
-void createGraph(Graph* graph, int8_t nodes) {
+#include "priority_queue.h"
+#include "dispatch.h"
+void createGraph(Graph* graph, int nodes) {
     graph->numNodes = nodes;
     for (int i = 0; i < nodes; i++) {
         graph->adjacentNodes[i] = NULL;
-        graph->occupied[i] = 0;
+        graph->occupiedDispatch[i] = NULL;
+        graph->occupiedIncident[i] = NULL;
     }
 }
 //maybe also add in char for streetnname ask group
-void addEdge(Graph* graph, int8_t from, uint8_t to, uint8_t weight) {
+void addEdge(Graph* graph, int from, int to, int weight) {
     Edge* edge = (Edge*)malloc(sizeof(Edge));
     edge->to = to;
     edge->weight = weight;
@@ -27,66 +30,62 @@ void addEdge(Graph* graph, int8_t from, uint8_t to, uint8_t weight) {
     graph->adjacentNodes[to] = edge2;
 }
 
-static void dijkstra(int src, int dist[], int parent[]) {
-    for (int i = 0; i < N; i++) {
-        dist[i] = INF;//shortest distance currently known from source to node i
-        //dist[3] = 0 from source to 3 costs 0
+void printIntersections() {
+    for (int i = KING_LOWERALBERT; i <= UNION_ARCH; i++) {
+        printf("%d - ", i);
 
-        parent[i] = -1;//which previous node gave the best path to i
-        //if shortest path to 11 comes from 14  parent[11] = 14
-    }
-    dist[src] = 0;
-
-    MinHeap h;
-    h.sz = 0;
-    heap_push(&h, src, 0);
-
-    while (!heap_empty(&h)) {
-        HeapItem cur = heap_pop(&h);
-        int u = cur.node;
-        int d = cur.dist;
-
-        if (d != dist[u]) continue; /* stale heap item */
-
-        for (Edge *e = g[u]; e; e = e->next) {
-            int v = e->to;
-            int nd = d + e->w;
-            if (nd < dist[v]) {
-                dist[v] = nd;
-                parent[v] = u;
-                heap_push(&h, v, nd);
-            }
+        switch(i) {
+            case KING_LOWERALBERT:
+                printf("Intersection of King and Lower Albert\n");
+                break;
+            case COLLINGWOOD_KING:
+                printf("Intersection of Collingwood and King\n");
+                break;
+            case COLLINGWOOD_QUEENSCRESENT:
+                printf("Intersection of Collingwood and Queens Crescent\n");
+                break;
+            case QUEENSCRESENT_ALBERT:
+                printf("Intersection of Queens Crescent and Albert\n");
+                break;
+            case ALBERT_STUART_LOWERALBERT:
+                printf("Intersection of Albert, Stuart, and Lower Albert\n");
+                break;
+            case STUART_UNIVERSITY:
+                printf("Intersection of Stuart and University\n");
+                break;
+            case STUART_ARCH:
+                printf("Intersection of Stuart and Arch\n");
+                break;
+            case UNION_DIVISION:
+                printf("Intersection of Union and Division\n");
+                break;
+            case DIVISION_EARL:
+                printf("Intersection of Division and Earl\n");
+                break;
+            case EARL_UNIVERSITY:
+                printf("Intersection of Earl and University\n");
+                break;
+            case UNION_UNIVERSITY:
+                printf("Intersection of Union and University\n");
+                break;
+            case UNION_FONTENAC:
+                printf("Intersection of Union and Fontenac\n");
+                break;
+            case FONTENAC_EARL:
+                printf("Intersection of Fontenac and Earl\n");
+                break;
+            case ALBERT_UNION:
+                printf("Intersection of Albert and Union\n");
+                break;
+            case UNION_ARCH:
+                printf("Intersection of Union and Arch\n");
+                break;
+            default:
+                printf("Unknown intersection\n");
         }
     }
 }
 
-static void print_path(int src, int dst, int parent[]) {
-    if (src == dst) {
-        printf("%d", src);
-        return;
-    }
-    if (parent[dst] == -1) {
-        printf("(no path)");
-        return;
-    }
-
-    int stack[MAXN], top = 0;
-    int cur = dst;
-    while (cur != -1) {
-        stack[top++] = cur;
-        if (cur == src) break;
-        cur = parent[cur];
-    }
-    if (stack[top - 1] != src) {
-        printf("(no path)");
-        return;
-    }
-
-    for (int i = top - 1; i >= 0; i--) {
-        printf("%d", stack[i]);
-        if (i) printf(" -> ");
-    }
-}
 
 void printGraph(Graph* g) {
     for (int i = 0; i < g->numNodes; i++) {

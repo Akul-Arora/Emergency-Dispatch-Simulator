@@ -5,19 +5,22 @@
 #ifndef UNTITLED3_GRAPH_GRID_H
 #define UNTITLED3_GRAPH_GRID_H
 #include <stdint.h>
-#define MAX_NODES 14
+#define MAX_NODES 15
+#include "priority_queue.h"
+#include "dispatch.h"
 
 typedef struct Edge{
-    uint8_t to;
-    uint8_t weight;//distance in meters
+    int to;
+    int weight;//distance in meters
     struct Edge* next;
 } Edge;
 
 typedef struct {
     //all the adjacent nodes (adjacency list)
     Edge* adjacentNodes[MAX_NODES];
-    uint8_t numNodes;
-    uint8_t occupied[MAX_NODES];
+    int numNodes;
+    Incident* occupiedIncident[MAX_NODES];
+    DispatchUnit* occupiedDispatch[MAX_NODES];
 } Graph ;
 
 enum intersectionNames {
@@ -38,9 +41,9 @@ enum intersectionNames {
     UNION_ARCH
 
 };
-void createGraph(Graph* graph, int8_t nodes);
-void addEdge(Graph* graph, int8_t from, uint8_t to, uint8_t weight);
+
+void printIntersections();
+void createGraph(Graph* graph, int nodes);
+void addEdge(Graph* graph, int from, int to, int weight);
 void printGraph(Graph* g);
-static void dijkstra(int src, int dist[], int parent[]);
-static void print_path(int src, int dst, int parent[]);
 #endif //UNTITLED3_GRAPH_GRID_H
